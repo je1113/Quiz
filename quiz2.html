@@ -9,7 +9,7 @@
 <body>
     <h2>Quiz2</h2>
     <div id="quiz"></div>
-        <button id="submit">Submit</button>
+        <button id="submit" onclick="buildResult(quizArr)">Submit</button>
     <div id="result"></div>
 </body>
 
@@ -17,8 +17,6 @@
     const quizDisplay = document.getElementById('quiz');
     const submitBtn = document.getElementById('submit');
     const resultDisplay = document.getElementById('result');
-
-
 
     //quiz 20문제
     const quizData =[
@@ -184,13 +182,19 @@
         }
         
     ];
-   
-
     
-   
-        
-        
+    
+    
+        // let isPass= false
+        // while(!isPass){
+            quizArr = randomNum3();
+            buildQuiz(quizArr);
+            
+        // }
     /* 20중 배열index 중복없이 3개 추출하기*/
+
+
+
     function randomNum3(){
         let randomArr = [ ];
         let i=0;
@@ -231,16 +235,16 @@
             }
         }
     
-    let buildResult = (arr) => {
+    function buildResult(arr){
         const result = [ ];
         const answerDisplays = quizDisplay.querySelectorAll('.answer'); 
         console.log(answerDisplays)
         let numCorrect = 0;
-        for(let i=0 ; i<arr.length; i++){
-            let currentQuestion = quizData[arr[i]-1];
+        for(i=0 ; i<arr.length; i++){
             const answerDisplay = answerDisplays[i];
-            console.log(answerDisplay)
-            const userAnswer = (answerDisplay.querySelector(`input:checked`)).value;
+            let currentQuestion = quizData[arr[i]-1];
+            const selector = `input:checked`;
+            const userAnswer = (answerDisplay.querySelector(selector)).value;
 
             if(userAnswer === currentQuestion.correct){  //user가 선택한 값과 정답 검증
                     answerDisplays[i].style.color = 'lightgreen';
@@ -252,15 +256,8 @@
         if(numCorrect==3){
             isPass = false;
         }
-        resultDisplay.innerHTML = `${numCorrect} out of ${arr.length}`; 
-    }
     
-
-    let isPass= false
-    while(!isPass){
-        let quizArr = randomNum3();
-        buildQuiz(quizArr);
-        submitBtn.addEventListener('click',buildResult(quizArr));
     }
-</script>
+
+</script>   
 </html>
