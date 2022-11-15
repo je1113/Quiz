@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>quiz</title>
+    <title>quiz2</title>
 </head>
 <body>
-    <h2>Quiz</h2>
+    <h2>Quiz2</h2>
     <div id="quiz"></div>
-        <button id="submit">Submit</button>
+        <button id="submit" onclick="buildResult(quizArr)">Submit</button>
     <div id="result"></div>
 </body>
 
@@ -17,9 +17,6 @@
     const quizDisplay = document.getElementById('quiz');
     const submitBtn = document.getElementById('submit');
     const resultDisplay = document.getElementById('result');
-
-    function buildQuiz(){ };
-    function showResult(){ };
 
     //quiz 20문제
     const quizData =[
@@ -186,7 +183,13 @@
         
     ];
     
+    
+    
+        
     /* 20중 배열index 중복없이 3개 추출하기*/
+
+
+
     function randomNum3(){
         let randomArr = [ ];
         let i=0;
@@ -210,50 +213,52 @@
         }
         return randomArr.sort();
     }
-    console.log(randomNum3())
-    /* 배열의 값3개만큼 반복!*/
 
-    function buildQuiz(){
-    const output = [ ]; //퀴즈 문제와 선택지가 저장될 배열
-    quizData.forEach(  //quizData배열값 불러오기
-        (currentQuestion, questionNum) => { 
-        const answers = [ ]; //퀴즈 선택지 배열
-        for(item in currentQuestion.answers){  
-            //퀴즈 선택지 DOM구조 생성
-            answers.push(`<label><input type="radio" name="question${questionNum}" value="${item}"> ${item} : ${currentQuestion.answers[item]}
-                </label>`);
+    function buildQuiz(arr){
+        const output = [ ];
+        for(i=0; i<arr.length; i++){
+             //퀴즈 문제와 선택지가 저장될 배열
+            let currentQuestion = quizData[arr[i]-1];
+            const answers= [ ];
+            for(item in currentQuestion.answers){
+                answers.push(`<label><input type="radio" name="question${arr[i]-1}" value="${item}"> ${item} : ${currentQuestion.answers[item]}
+                        </label>`);
             }
-            //output배열에 퀴즈와 선택지 DOM 추가하기
             output.push(`<div class="question"> ${currentQuestion.question}</div>
-                <div class="answer">${answers.join('')}</div>`);
-        });
-     quizDisplay.innerHTML = output.join(' '); //join메서드, 퀴즈 사이에 공백 넣기
-    }
-
-    function showResult(){
-        //'answer'이름의 클래스를 배열로 저장하기
-        const answerDisplays = quizDisplay.querySelectorAll('.answer');  
-        console.log(answerDisplays);
-        let numCorrect = 0; //퀴즈 정답률 기록
-        //답안 검증하기
-        quizData.forEach( (currentQuestion, questionNum)=>{   
-        const answerDisplay = answerDisplays[questionNum]; //answerDisplays배열을 index별로 불러오기
-        const selector = `input[name=question${questionNum}]:checked`; //input태그의 속성값 지정하기
-        const userAnswer = (answerDisplay.querySelector(selector) || {}).value; //input check값 저장
+                        <div class="answer">${answers.join('')}</div>`);
+                        quizDisplay.innerHTML = output.join(' <br>');
+            }
+        }
+    
+    function buildResult(arr){
+        const result = [ ];
+        const answerDisplays = quizDisplay.querySelectorAll('.answer'); 
+        console.log(answerDisplays)
+        let numCorrect = 0;
+        for(i=0 ; i<arr.length; i++){
+            const answerDisplay = answerDisplays[i];
+            let currentQuestion = quizData[arr[i]-1];
+            const selector = `input:checked`;
+            const userAnswer = (answerDisplay.querySelector(selector)).value;
 
             if(userAnswer === currentQuestion.correct){  //user가 선택한 값과 정답 검증
+                    answerDisplays[i].style.color = 'lightgreen';
                     numCorrect++;
-                    answerDisplays[questionNum].style.color = 'lightgreen';
             }else{
-                    answerDisplays[questionNum].style.color = 'red';
+                    answerDisplays[i].style.color = 'red';
             }
-                        
-        });
-
-            //resultDisplay DOM에 결과값 삽입하기
-            resultDisplay.innerHTML = `${numCorrect} out of ${quizData.length}`; 
+        }
+        if(numCorrect!=3){
+            //새로고침
+            window.location.reload()
+        }
+        
     }
-    buildQuiz();
-    submitBtn.addEventListener('click',showResult);
-</script>
+
+        
+        
+        quizArr = randomNum3();
+        buildQuiz(quizArr);
+        
+</script>   
 </html>
