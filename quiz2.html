@@ -185,12 +185,7 @@
     
     
     
-        // let isPass= false
-        // while(!isPass){
-            quizArr = randomNum3();
-            buildQuiz(quizArr);
-            
-        // }
+        
     /* 20중 배열index 중복없이 3개 추출하기*/
 
 
@@ -253,11 +248,17 @@
                     answerDisplays[i].style.color = 'red';
             }
         }
-        if(numCorrect==3){
-            isPass = false;
+        if(numCorrect!=3){
+            //새로고침
+            window.location.reload()
         }
-    
+        
     }
 
+        
+        
+        quizArr = randomNum3();
+        buildQuiz(quizArr);
+        
 </script>   
 </html>
